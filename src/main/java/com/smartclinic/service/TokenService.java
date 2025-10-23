@@ -1,10 +1,16 @@
-package com.smartclinic.service;
-
-import org.springframework.stereotype.Service;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class TokenService {
-    public String generateToken(String username) {
-        return "token_" + username + "_123";
+    private String secretKey = "secret";
+
+    public String generateToken(String email) {
+        return Jwts.builder()
+            .setSubject(email)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
     }
 }
